@@ -268,7 +268,7 @@ export function RegistrationForm() {
                 value={values.platformSiaran}
                 aria-invalid={Boolean(errors.platformSiaran)}
                 onChange={(e) => setField("platformSiaran", e.target.value)}
-                placeholder="Contoh: TikTok Live, YouTube, Nimo, Bigo"
+                placeholder="Contoh: TikTok Live, YouTube"
                 autoComplete="off"
               />
               {errorText("platformSiaran")}
