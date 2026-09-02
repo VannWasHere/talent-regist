@@ -15,7 +15,7 @@ Vercel free tier.
 | `/api/admin/export` | Export CSV (butuh sesi admin).                                     |
 
 Field form (semua wajib): Nama Akun GOSH, ID GOSH, Email GOSH, Jenis Kelamin
-(Cowo/Cewe), platform siaran, link sosmed, link video siaran, nomor WhatsApp.
+(Pria/Wanita), platform siaran, link sosmed, link video siaran, nomor WhatsApp.
 Sebelum terkirim muncul modal konfirmasi berisi Sistem & SOW + Requirements
 dengan dua checkbox persetujuan. Video dikirim sebagai **link saja** (Google
 Drive / YouTube / TikTok), tidak ada upload file.
@@ -90,7 +90,7 @@ Tabel `public.talent_registrations`:
 | `nama_akun_gosh`  | `text`        | Nama Akun GOSH             |
 | `id_gosh`         | `text`        | ID GOSH                    |
 | `email`           | `text`        | unique (lower), lowercase  |
-| `jenis_kelamin`   | `text`        | `Cowo` / `Cewe`            |
+| `jenis_kelamin`   | `text`        | `Pria` / `Wanita`          |
 | `platform_siaran` | `text`        | Platform siaran            |
 | `link_sosmed`     | `text`        | Link sosmed                |
 | `video_link`      | `text`        | Link video livestream      |

@@ -17,18 +17,18 @@ create table if not exists public.talent_registrations (
   whatsapp         text        not null
 );
 
--- Hanya boleh 'Cowo' atau 'Cewe'
-do $$
-begin
-  if not exists (
-    select 1 from pg_constraint
-    where conname = 'talent_registrations_jenis_kelamin_check'
-  ) then
-    alter table public.talent_registrations
-      add constraint talent_registrations_jenis_kelamin_check
-      check (jenis_kelamin in ('Cowo', 'Cewe'));
-  end if;
-end $$;
+-- Migrasi label lama (Cowo/Cewe) ke label baru (Pria/Wanita).
+-- Constraint lama dilepas dulu supaya update tidak ditolak.
+alter table public.talent_registrations
+  drop constraint if exists talent_registrations_jenis_kelamin_check;
+
+update public.talent_registrations set jenis_kelamin = 'Pria'   where jenis_kelamin = 'Cowo';
+update public.talent_registrations set jenis_kelamin = 'Wanita' where jenis_kelamin = 'Cewe';
+
+-- Hanya boleh 'Pria' atau 'Wanita'
+alter table public.talent_registrations
+  add constraint talent_registrations_jenis_kelamin_check
+  check (jenis_kelamin in ('Pria', 'Wanita'));
 
 -- Satu email hanya bisa mendaftar sekali (case-insensitive).
 create unique index if not exists talent_registrations_email_unique

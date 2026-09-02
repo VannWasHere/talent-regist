@@ -45,3 +45,6 @@ next-env.d.ts
 
 # tetap commit contoh env
 !.env.example
+
+.vercel
+.env*

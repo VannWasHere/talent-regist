@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-/** Pilihan jenis kelamin, sama seperti Google Form lama. */
-export const GENDERS = ["Cowo", "Cewe"] as const;
+/** Pilihan jenis kelamin. */
+export const GENDERS = ["Pria", "Wanita"] as const;
 
 /**
  * Normalisasi nomor WhatsApp Indonesia ke format lokal `08xxxxxxxxxx`.
