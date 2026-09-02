@@ -1,7 +1,10 @@
-import { randomUUID } from "node:crypto";
-
-import { registrationSchema, type SubmissionRecord } from "@/lib/schema";
-import { saveSubmission, submissionExists } from "@/lib/storage";
+import { registrationSchema } from "@/lib/schema";
+import {
+  DuplicateEmailError,
+  saveSubmission,
+  submissionExists,
+  supabaseConfigured,
+} from "@/lib/storage";
 
 export const runtime = "nodejs";
 
@@ -38,6 +41,17 @@ function rateLimited(ip: string): boolean {
 }
 
 export async function POST(request: Request) {
+  if (!supabaseConfigured()) {
+    return json(
+      {
+        ok: false,
+        error:
+          "Server belum terhubung ke database. Hubungi admin (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY belum di-set).",
+      },
+      503,
+    );
+  }
+
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (rateLimited(ip)) {
@@ -66,7 +80,7 @@ export async function POST(request: Request) {
     typeof (payload as Record<string, unknown>).website === "string" &&
     (payload as Record<string, unknown>).website !== ""
   ) {
-    return json({ ok: true, duplicate: false });
+    return json({ ok: true });
   }
 
   const parsed = registrationSchema.safeParse(payload);
@@ -80,28 +94,21 @@ export async function POST(request: Request) {
   }
 
   const data = parsed.data;
+  const duplicateMessage =
+    "Email ini sudah pernah mendaftar. Kalau perlu mengubah data, hubungi admin lewat WhatsApp.";
 
   try {
     if (await submissionExists(data.email)) {
-      return json(
-        {
-          ok: false,
-          error:
-            "Email ini sudah pernah mendaftar. Kalau perlu mengubah data, hubungi admin lewat WhatsApp.",
-        },
-        409,
-      );
+      return json({ ok: false, error: duplicateMessage }, 409);
     }
 
-    const record: SubmissionRecord = {
-      ...data,
-      id: randomUUID(),
-      createdAt: new Date().toISOString(),
-    };
-
-    await saveSubmission(record);
-    return json({ ok: true, id: record.id });
+    const saved = await saveSubmission(data);
+    return json({ ok: true, id: saved.id });
   } catch (error) {
+    if (error instanceof DuplicateEmailError) {
+      return json({ ok: false, error: duplicateMessage }, 409);
+    }
+
     console.error("[submit] gagal menyimpan pendaftaran", error);
     return json(
       {

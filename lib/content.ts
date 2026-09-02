@@ -31,11 +31,51 @@ export type GuideStep = {
   body: string[];
 };
 
+/** Alamat web GOSH (cara daftar yang disarankan). */
+export const GOSH_WEB_URL = "https://gosh.com/";
+
 /**
- * Panduan bikin akun GOSH + cara ambil ID.
+ * Cara paling gampang: daftar lewat web.
+ * Kalau tampilan web GOSH berubah, cukup edit teks di bawah ini.
+ */
+export const GOSH_WEB_STEPS: GuideStep[] = [
+  {
+    title: "1. Buka gosh.com",
+    body: [
+      `Buka ${GOSH_WEB_URL} di browser (HP maupun laptop sama saja).`,
+      "Cara ini paling cepat karena tidak perlu install apa pun, dan ID kamu langsung kelihatan.",
+    ],
+  },
+  {
+    title: "2. Sign Up (atau Sign In kalau sudah punya akun)",
+    body: [
+      "Klik Sign Up untuk bikin akun baru, atau Sign In kalau kamu sudah punya akun GOSH.",
+      "Daftar memakai email aktif kamu, karena email inilah yang harus kamu tulis di kolom “Email yang didaftarkan di GOSH”.",
+      "Cek inbox atau folder spam kalau GOSH mengirim kode verifikasi, lalu masukkan kodenya.",
+    ],
+  },
+  {
+    title: "3. Buka profil di kanan atas",
+    body: [
+      "Setelah masuk, klik / tap foto profil kamu di pojok kanan atas halaman.",
+      "Halaman profil kamu akan terbuka.",
+    ],
+  },
+  {
+    title: "4. Ambil ID di samping nama",
+    body: [
+      "Di halaman profil, lihat tepat di samping nama akun kamu. Angka di situ adalah ID GOSH yang diminta form ini.",
+      "Copy angkanya, lalu paste ke kolom “ID GOSH”. Nama akun yang tampil di sebelahnya kamu tulis di kolom “Nama Akun GOSH”.",
+      "ID itu angka unik akun kamu dan berbeda dengan nama akun / username.",
+    ],
+  },
+];
+
+/**
+ * Alternatif: lewat aplikasi HP.
  * Kalau tampilan aplikasi GOSH berubah, cukup edit teks di bawah ini.
  */
-export const GOSH_ACCOUNT_STEPS: GuideStep[] = [
+export const GOSH_APP_STEPS: GuideStep[] = [
   {
     title: "1. Download aplikasi GOSH",
     body: [
@@ -67,13 +107,12 @@ export const GOSH_ACCOUNT_STEPS: GuideStep[] = [
       "ID GOSH itu angka unik akun kamu dan berbeda dengan username. Kalau tidak menemukannya, buka Profil → Setting / Pengaturan → Account, ID biasanya tampil di bagian informasi akun.",
     ],
   },
-  {
-    title: "5. Pastikan email, nama akun, dan ID cocok",
-    body: [
-      "Sebelum submit, cek ulang: nama akun, ID, dan email yang kamu tulis di form harus sama persis dengan yang ada di aplikasi GOSH.",
-      "Kalau ada yang beda, proses verifikasi bisa tertunda atau pendaftaran ditolak.",
-    ],
-  },
+];
+
+/** Pengingat terakhir sebelum submit, berlaku untuk kedua cara di atas. */
+export const GOSH_FINAL_CHECK: string[] = [
+  "Cek ulang: nama akun, ID, dan email yang kamu tulis di form harus sama persis dengan yang ada di akun GOSH kamu.",
+  "Kalau ada yang beda, proses verifikasi bisa tertunda atau pendaftaran ditolak.",
 ];
 
 export const VIDEO_TIPS: string[] = [

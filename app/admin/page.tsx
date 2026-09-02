@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { adminPasswordConfigured, isAdmin } from "@/lib/auth";
-import { blobEnabled, listSubmissions } from "@/lib/storage";
+import { listSubmissions, supabaseConfigured } from "@/lib/storage";
 
 export const metadata: Metadata = {
   title: "Admin - Pendaftar Talent",
@@ -81,7 +81,28 @@ export default async function AdminPage(props: PageProps<"/admin">) {
     );
   }
 
-  const records = await listSubmissions();
+  if (!supabaseConfigured()) {
+    return (
+      <main className="mx-auto w-full max-w-md px-4 py-16">
+        <Alert variant="destructive">
+          <LockIcon />
+          <AlertTitle>Supabase belum dikonfigurasi</AlertTitle>
+          <AlertDescription>
+            Set <code>SUPABASE_URL</code> dan{" "}
+            <code>SUPABASE_SERVICE_ROLE_KEY</code>, lalu redeploy.
+          </AlertDescription>
+        </Alert>
+      </main>
+    );
+  }
+
+  let records: Awaited<ReturnType<typeof listSubmissions>> = [];
+  let loadError: string | null = null;
+  try {
+    records = await listSubmissions();
+  } catch (error) {
+    loadError = error instanceof Error ? error.message : "Gagal memuat data.";
+  }
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-10">
@@ -90,7 +111,6 @@ export default async function AdminPage(props: PageProps<"/admin">) {
           <h1 className="font-heading text-xl font-semibold">Pendaftar talent</h1>
           <p className="text-sm text-muted-foreground">
             {records.length} pendaftar
-            {blobEnabled() ? "" : " (mode penyimpanan lokal)"}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -105,6 +125,18 @@ export default async function AdminPage(props: PageProps<"/admin">) {
           </form>
         </div>
       </div>
+
+      {loadError ? (
+        <Alert variant="destructive" className="mb-6">
+          <LockIcon />
+          <AlertTitle>Gagal memuat data dari Supabase</AlertTitle>
+          <AlertDescription>
+            {loadError}. Pastikan tabel <code>talent_registrations</code> sudah
+            dibuat (jalankan <code>supabase/schema.sql</code>) dan service role
+            key benar.
+          </AlertDescription>
+        </Alert>
+      ) : null}
 
       {records.length === 0 ? (
         <Card>

@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { GOSH_WEB_URL } from "@/lib/content";
 import { GENDERS, fieldsSchema, type RegistrationInput } from "@/lib/schema";
 
 type Values = {
@@ -169,7 +170,13 @@ export function RegistrationForm() {
               <AlertTitle>Belum punya akun GOSH?</AlertTitle>
               <AlertDescription>
                 <p>
-                  Bikin akunnya dulu, lalu ambil ID kamu dari halaman profil.{" "}
+                  Paling gampang daftar lewat web di{" "}
+                  <a href={GOSH_WEB_URL} target="_blank" rel="noreferrer noopener">
+                    gosh.com
+                    <ExternalLinkIcon className="ml-1 inline size-3 align-[-2px]" />
+                  </a>
+                  . Setelah sign up / sign in, tap profil di kanan atas — ID yang
+                  diminta form ini ada di samping nama akun kamu.{" "}
                   <a href="/panduan-gosh" target="_blank" rel="noreferrer">
                     Buka panduan lengkap
                     <ExternalLinkIcon className="ml-1 inline size-3 align-[-2px]" />
@@ -202,7 +209,8 @@ export function RegistrationForm() {
                 autoComplete="off"
               />
               <p className="text-xs text-muted-foreground">
-                Angka unik akun kamu, ada di tab Profil / Me di bawah nama akun.
+                Angka unik akun kamu. Di web: profil kanan atas, tepat di samping
+                nama akun. Di aplikasi: tab Profil / Me, di bawah nama akun.
               </p>
               {errorText("idGosh")}
             </div>

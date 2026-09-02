@@ -27,7 +27,14 @@ export async function GET() {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const records = await listSubmissions();
+  let records: Awaited<ReturnType<typeof listSubmissions>>;
+  try {
+    records = await listSubmissions();
+  } catch (error) {
+    console.error("[export] gagal membaca data", error);
+    return new Response("Gagal membaca data dari Supabase", { status: 500 });
+  }
+
   const rows = [COLUMNS.map(([header]) => csvCell(header)).join(",")];
 
   for (const record of records) {

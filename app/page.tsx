@@ -55,7 +55,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-1.5 font-medium underline underline-offset-4"
             >
               <BookOpenIcon className="size-4" />
-              Panduan bikin akun GOSH &amp; cara ambil ID
+              Panduan bikin akun GOSH (web / aplikasi) &amp; cara ambil ID
             </Link>
           </p>
         </CardContent>
